@@ -49,13 +49,16 @@ def tableRead():
     if(i > 7):
         tkinter.messagebox.showinfo('提示', '请重置后再进行读取')
         return
-    flag = True
     file_path = filedialog.askopenfilename(filetypes = [('CSV', 'csv')])
-    info=pd.read_csv(file_path,encoding = 'gbk')
-    for j in info['发送的帧']:
-        srcAddr = j.split('-')[0]
-        desAddr = j.split('>')[1]
-        btnSend()
+    if(file_path):
+        flag = True
+        info=pd.read_csv(file_path,encoding = 'gbk')
+        for j in info['发送的帧']:
+            if(i < 8):
+                srcAddr = j.split('-')[0]
+                desAddr = j.split('>')[1]
+                btnSend()
+        flag = False
 #         for i in obj:
 #             print(i)
     #except:
@@ -72,19 +75,20 @@ def tableSave():
     global dataIO
     boolSave=tkinter.messagebox.askokcancel('提示', '要是否进行保存?')
     if(boolSave):
-        colName = ['发送的帧','S1地址','S1接口','S2地址','S2接口','S3地址','S3接口','S1的处理','S2的处理','S3的处理']
+        colName = ['发送的帧','S1地址','S1接口','S2地址','S2接口','S1的处理','S2的处理','转发途径']
         csvFile = pd.DataFrame(columns = colName, data = dataIO)
         csvFile.to_csv('test.csv',encoding='gbk',index_label = "序号")
     dataIO = []
 #重置事件
 def btnReset():
     #lbdata.destory()
-    global i
+    global i, flag, dataIO
     i = 0
     for widget in lbdata.winfo_children():
         widget.destroy()
     S1.clear()
     S2.clear()
+    flag = False
     #S3.clear()
     dataIO = []
 #发送事件
@@ -93,7 +97,7 @@ def btnSend():
     if(i > 7):
         tkinter.messagebox.showinfo('提示','转发信息已到达最大数据')
         return
-    dataChip = ["","","","","","","","","",""]
+    dataChip = ["","","","","","","",""]
     if(not flag):
         srcAddr = varSrc.get()
         desAddr = varDes.get()
@@ -101,6 +105,7 @@ def btnSend():
         return
     handleB1 = ""
     handleB2 = ""
+    routPort = ""
     flagb1 = True#表示两个转发表都要转发
     flagb2 = True
     seqS = [0,0,0]
@@ -108,8 +113,10 @@ def btnSend():
         seqS = [0,1]
     elif(srcAddr in lan2):
         seqS = [1,0]
-    else:
+    elif(srcAddr in lan3):
         seqS = [1,0]
+    else:
+        return
     if(desAddr not in lan1):
         if(desAddr not in lan2):
             if(desAddr not in lan3):
@@ -130,6 +137,12 @@ def btnSend():
                         flagb2 = False
                     else:
                         handleB1 = "登记,转发"
+                        routPort += "S1 - >"
+                else:
+                    if(hostSegOne[srcAddr] == 1):
+                        routPort += "S1 - >"
+                    else:
+                        routPort += "S1 - >"
             else:
                 if(desAddr in S1):
                     if(S1[desAddr] == hostSegOne[srcAddr]):
@@ -137,6 +150,10 @@ def btnSend():
                         flagb2 = False
                     else:
                         handleB1 = "转发"
+                        routPort += "S1 - >"
+                else:
+                        handleB1 = "转发"
+                        routPort += "S1 - >"
         elif(seqS[count] == 1 and flagb2):
             if(srcAddr not in S2):
                 S2[srcAddr] = hostSegTwo[srcAddr]
@@ -151,6 +168,12 @@ def btnSend():
                         flagb1 = False
                     else:
                         handleB2 = "登记,转发"
+                        routPort += "S2 - >"
+                else:
+                    if(hostSegOne[srcAddr] == 1):
+                        routPort += "S2 - >"
+                    else:
+                        routPort += "S2 - >"
             else:
                 if(desAddr in S2):
                     if(S2[desAddr] == hostSegTwo[srcAddr]):
@@ -158,17 +181,24 @@ def btnSend():
                         flagb1 = False
                     else:
                         handleB2 = "转发"
+                        routPort += "S2 - >"
+                else:
+                        handleB2 = "转发"
+                        routPort += "S2 - >"
             if(srcAddr in lan2):
                 flagb1 = True
                 
         count = count + 1
     #print(i)
+    routPort = routPort[:-4]
     Label(lbdata, text=srcAddr + "->" + desAddr).place(x=0,y=20*i)
-    Label(lbdata, text=handleB1).place(x=380,y=20*i)
-    Label(lbdata, text=handleB2).place(x=450,y=20*i)
+    Label(lbdata, text=handleB1).place(x=290,y=20*i)
+    Label(lbdata, text=handleB2).place(x=380,y=20*i)
+    Label(lbdata, text=routPort).place(x=470,y=20*i)
     dataChip[0] = srcAddr + "->" + desAddr
-    dataChip[7] = handleB1
-    dataChip[8] = handleB2
+    dataChip[5] = handleB1
+    dataChip[6] = handleB2
+    dataChip[7] = routPort
     dataIO.append(dataChip)
     i = i + 1
 
@@ -207,9 +237,6 @@ if __name__ == "__main__":
     #发送按钮
     btn = Button(sendfm,text="发送",command=btnSend)
     btn.place(x=620,y=5)
-    #重置按钮
-    #bt = Button(sendfm,text="重置",command=btnReset)
-    #bt.place(x=650,y=5)
     #表头
     Label(lbhead, text="发送的帧").place(x=0,y=12)
     Label(lbhead, text="S1的转发表").place(x=70,y=2)
@@ -218,10 +245,7 @@ if __name__ == "__main__":
     Label(lbhead, text="S2的转发表").place(x=180,y=2)
     Label(lbhead, text="地址").place(x=170,y=20)
     Label(lbhead, text="接口").place(x=230,y=20)
-    Label(lbhead, text="S3的转发表").place(x=290,y=2)
-    Label(lbhead, text="地址").place(x=280,y=20)
-    Label(lbhead, text="接口").place(x=330,y=20)
-    Label(lbhead, text="S1的处理").place(x=380,y=12)
-    Label(lbhead, text="S2的处理").place(x=450,y=12)
-    Label(lbhead, text="S3的处理").place(x=520,y=12)
+    Label(lbhead, text="S1的处理").place(x=290,y=12)
+    Label(lbhead, text="S2的处理").place(x=380,y=12)
+    Label(lbhead, text="转发途径").place(x=470,y=12)
     mainloop()
