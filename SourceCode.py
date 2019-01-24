@@ -66,9 +66,16 @@ def tableRead():
 # def hello():
 #     print("c");
 
-#关于作者
+#关于使用
 def aboutAuthor():
-    tkinter.messagebox.showinfo('作者及分工', '张宇：逆向学习算法的实现，程序总体功能设计\n王含艺：python的Tkinter库交互式界面布局\n吴昊航：程序框架、算法流程图')
+    top1=tkinter.Toplevel()
+    image = Image.open('功能框图.jpg')
+    img = ImageTk.PhotoImage(image)
+    canvas1 = tkinter.Canvas(top1, width = 500 ,height = 566, bg = 'white')
+    canvas1.create_image(0,0,image = img,anchor="nw")
+    #canvas1.create_image(image.width,0,image = img,anchor="nw")
+    canvas1.pack()
+    top1.mainloop()
     
 #保存数据
 def tableSave():
@@ -139,10 +146,7 @@ def btnSend():
                         handleB1 = "登记,转发"
                         routPort += "S1 - >"
                 else:
-                    if(hostSegOne[srcAddr] == 1):
-                        routPort += "S1 - >"
-                    else:
-                        routPort += "S1 - >"
+                    routPort += "S1 - >"
             else:
                 if(desAddr in S1):
                     if(S1[desAddr] == hostSegOne[srcAddr]):
@@ -170,10 +174,7 @@ def btnSend():
                         handleB2 = "登记,转发"
                         routPort += "S2 - >"
                 else:
-                    if(hostSegOne[srcAddr] == 1):
-                        routPort += "S2 - >"
-                    else:
-                        routPort += "S2 - >"
+                    routPort += "S2 - >"
             else:
                 if(desAddr in S2):
                     if(S2[desAddr] == hostSegTwo[srcAddr]):
