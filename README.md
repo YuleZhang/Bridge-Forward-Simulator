@@ -1,7 +1,7 @@
 # Bridge-Forward-Simulator
 网桥转发模拟工具
 # 界面设计
-![text](https://github.com/YuleZhang/Bridge-Forward-Simulator/blob/master/%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.PNG)
+![text](https://github.com/YuleZhang/Bridge-Forward-Simulator/blob/master/%E8%B0%83%E8%AF%95.PNG)
 # 设计环境
 ## 操作系统
 Windows 10 教育版
