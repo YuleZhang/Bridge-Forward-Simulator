@@ -1,7 +1,7 @@
 # Bridge-Forward-Simulator
 网桥转发模拟工具
 # 界面设计
-![调试](img/framework.png)
+![调试](/img/framework.png)
 
 # 设计环境
 ## 操作系统
