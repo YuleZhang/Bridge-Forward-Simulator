@@ -1,7 +1,8 @@
 # Bridge-Forward-Simulator
 网桥转发模拟工具
 # 界面设计
-![调试](img/调试.png)
+![调试](img/framework.png)
+
 # 设计环境
 ## 操作系统
 Windows 10 教育版
@@ -16,7 +17,7 @@ Windows 10 教育版
 
 ## 核心算法
 
-![img](img/核心算法描述.png)
+![img](img/algorithm.png)
 
 # 调试错误记录
 
