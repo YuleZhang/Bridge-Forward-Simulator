@@ -206,7 +206,7 @@ def btnSend():
 if __name__ == "__main__":
     varSrc = StringVar()
     varDes = StringVar()
-    img = Image.open('vln.jpg')  # 打开图片
+    img = Image.open('img/vln.jpg')  # 打开图片
     photo = ImageTk.PhotoImage(img)  # 用PIL模块的PhotoImage打开
     imglabel = Label(lbPic, image=photo)
     imglabel.place(x=0,y=0)

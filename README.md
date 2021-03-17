@@ -1,7 +1,7 @@
 # Bridge-Forward-Simulator
 网桥转发模拟工具
 # 界面设计
-![text](https://github.com/YuleZhang/Bridge-Forward-Simulator/blob/master/%E8%B0%83%E8%AF%95.PNG)
+![调试](E:/Website/source/assets/调试.png)
 # 设计环境
 ## 操作系统
 Windows 10 教育版
@@ -13,10 +13,10 @@ Windows 10 教育版
 * pandas
 * PIL
 * pyinstaller
-# 分工
-* 张宇：逆向学习算法的实现，程序总体功能设计
-* 王含艺：python的Tkinter库交互式界面布局
-* 吴昊航：程序框架、算法流程图
+
+## 核心算法
+
+![img](img/核心算法描述.png)
 
 # 调试错误记录
 
@@ -33,4 +33,4 @@ Windows 10 教育版
 
 3. 文件数大于转发表最大容量，读取到转发表展示时，会重复弹出提示窗口
 
-![调试](调试.png)
+
